@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+  <link href="https://fonts.googleapis.com/css?family=Exo" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Playfair+Display" rel="stylesheet">
+  <style media="screen">
+    .content {
+      border-left: 1px solid black;
+      border-right: 1px solid black;
+      width: 800px;
+      height: 900px;
+      margin: auto;
+      margin-top: -20px;
+    }
+
+    .space {
+      margin-top: 20px;
+      width: 100px;
+      height: 30px;
+    }
+
+    .out {
+      width: 250px;
+      height: 150px;
+      background-color: #999999;
+      margin: 100px auto auto auto;
+      display: table;
+      padding-left: 20px;
+      padding-right: 20px;
+    }
+
+    .inner {
+      display: table-cell;
+      vertical-align: middle;
+      text-align: center;
+    }
+
+    .before {
+      color: white;
+    }
+
+    .after {
+      color: black;
+    }
+
+    span {
+      font-size: 35px;
+      font-family: 'Playfair Display', serif;
+    }
+
+    #main-center {
+      border: 1px solid black;
+      width: 650px;
+      height: 350px;
+      margin: auto;
+      margin-top: 50px;
+    }
+
+    #title_start {
+      width: 600px;
+      margin: auto;
+      margin-top: 140px;
+    }
+
+    #first_start {
+      text-align: center;
+    }
+
+    #result {
+      border: 1px solid black;
+      width: 650px;
+      height: 350px;
+      margin: auto;
+      margin-top: 50px;
+    }
+
+    #score1,
+    #score2 {
+      text-align: center;
+    }
+
+    #score1 {
+      margin-top: 60px;
+    }
+
+    .toTop {
+      margin: auto;
+      display: block;
+      width: 150px;
+      padding: 0.8em;
+      text-align: center;
+      text-decoration: none;
+      color: #EC407A;
+      border: 1px solid #EC407A;
+      border-radius: 3px;
+      transition: .4s;
+      font-family: 'Exo', sans-serif;
+      font-size: 20px;
+    }
+
+    .toTop:hover {
+      background: #EC407A;
+      color: #fff;
+    }
+
+    .toTop_posi {
+      width: 200px;
+      height: 100px;
+      margin: auto;
+      margin-top: 30px;
+      text-align: center;
+    }
+
+    .Multi_panel {
+      border: 1px solid black;
+      border-top: none;
+      width:650px;
+      height: 70px;
+      margin: auto;
+    }
+  </style>
+  <script>
+  let arr_ans = [
+    ["j", 74, "a", 65, "v", 86, "a", 65, "s", 83, "c", 67, "r", 82, "i", 73, "p", 80, "t", 84],
+    ["d", 68, "o", 79, "c", 67, "u", 85, "m", 77, "e", 69, "n", 78, "t", 84, ".", 190, "w", 87, "r", 82, "i", 73, "t", 84, "e", 69],
+    ["d", 68, "o", 79, "c", 67, "u", 85, "m", 77, "e", 69, "n", 78, "t", 84, ".", 190, "g", 71, "e", 69, "t", 84, "E", 1069, "l", 76, "e", 69, "m", 77, "e", 69, "n", 78, "t", 84, "B", 1066, "y", 89, "I", 1073, "d", 68],
+    ["s", 83, "e", 69, "t", 84, "I", 1073, "n", 78, "t", 84, "e", 69, "r", 82, "v", 86, "a", 65, "l", 76],
+    ["s", 83, "e", 69, "t", 84, "T", 1084, "i", 73, "m", 77, "e", 69, "o", 79, "u", 85, "t", 84],
+    ["f", 70, "u", 85, "n", 78, "c", 67, "t", 84, "i", 73, "o", 79, "n", 78],
+    ["c", 67, "o", 79, "n", 78, "s", 83, "o", 79, "l", 76, "e", 69, ".", 190, "l", 76, "o", 79, "g", 71],
+    ["d", 68, "o", 79, "c", 67, "u", 85, "m", 77, "e", 69, "n", 78, "t", 84, ".", 190, "c", 67, "r", 82, "e", 69, "a", 65, "t", 84, "e", 69, "E", 1069, "l", 76, "e", 69, "m", 77, "e", 69, "n", 78, "t", 84],
+    ["d", 68, "o", 79, "c", 67, "u", 85, "m", 77, "e", 69, "n", 78, "t", 84, ".", 190, "b", 66, "o", 79, "d", 68, "y", 89, ".", 190, "a", 65, "p", 80, "p", 80, "e", 69, "n", 78, "d", 68, "C", 1067, "h", 72, "i", 73, "l", 76, "d", 68],
+    ["d", 68, "o", 79, "c", 67, "u", 85, "m", 77, "e", 69, "n", 78, "t", 84, ".", 190, "g", 71, "e", 69, "t", 84, "E", 1069, "l", 76, "e", 69, "m", 77, "e", 69, "n", 78, "t", 84, "s", 83, "B", 1066, "y", 89, "T", 1084, "a", 65, "g", 71, "N",
+      1078, "a", 65, "m", 77, "e", 69],
+    [".", 190, "t", 84, "e", 69, "x", 88, "t", 84, "C", 1067, "o", 79, "n", 78, "t", 84, "e", 69, "n", 78, "t", 84],
+    ["u", 85, "n", 78, "d", 68, "e", 69, "f", 70, "i", 73, "n", 78, "e", 69, "d", 68],
+    ["n", 78, "u", 85, "l", 76, "l", 76],
+    ["w", 87, "i", 73, "n", 78, "d", 68, "o", 79, "w", 87, ".", 190, "o", 79, "n", 78, "l", 76, "o", 79, "a", 65, "d", 68],
+    ["a", 65, "r", 82, "r", 82, "a", 65, "y", 89, ".", 190, "l", 76, "e", 69, "n", 78, "g", 71, "t", 84, "h", 72],
+    ["p", 80, "r", 82, "o", 79, "t", 84, "o", 79, "t", 84, "y", 89, "p", 80, "e", 69],
+    ["t", 84, "o", 79, "S", 1083, "t", 84, "r", 82, "i", 73, "n", 78, "g", 71],
+    ["p", 80, "a", 65, "r", 82, "s", 83, "e", 69, "I", 1073, "n", 78, "t", 84],
+    ["v", 86, "a", 65, "r", 82],
+    ["l", 76, "e", 69, "t", 84],
+    ["c", 67, "o", 79, "n", 78, "s", 83, "t", 84],
+  ];
+
+  let keyStatus = [];    //shiftがtrueかfalseかを格納する配列
+  let ply_num = 0;       //問題の列
+  let ct = 1;            //文字数カウント
+  let match = 0;         //正しく入力した数
+  let all_type = 0;      //すべての入力数
+  let timerId = NaN;
+  let timer_ct = 60;     //60秒制限
+
+  //Fisher–Yatesシャッフルアルゴリズムを使った配列シャッフル
+  Array.prototype.shuffle = function() {
+    let w = this.length;
+    while (w) {
+      let j = Math.floor(Math.random() * w);
+      let t = this[--w];
+      this[w] = this[j];
+      this[j] = t;
+    }
+    return this;
+  }
+
+  let start = () => {
+    arr_ans.shuffle();//startが実行されたら配列をシャッフル
+
+    document.onkeydown = keydown1;
+
+    function keydown1(e) {
+      let keyCode = e.keyCode;
+      if (keyCode == 32) { //エンターが押されたら開始
+        const target = document.getElementById("main-center"); //DOMをリセット
+        while (target.firstChild) {
+          target.removeChild(target.firstChild);
+        }
+        document.getElementById("counter").textContent = "残り" + timer_ct + "秒";
+        startTimer();
+        init();
+      }
+    }
+
+  }
+
+  let init = () => {
+    let t = document.getElementById("main-center");
+
+    let div_out = document.createElement("div");
+    div_out.className = "out";
+
+    let div_inner = document.createElement("div");
+    div_inner.className = "inner";
+
+    let df = document.createDocumentFragment();
+    for (let i = 0; i < arr_ans[ply_num].length; i += 2) {
+      let elm = document.createElement("span");
+      elm.className = "before";
+      elm.appendChild(document.createTextNode(arr_ans[ply_num][i])); //二次元配列から一文字ずつ取り出してツリーに追加
+      df.appendChild(elm);
+    }
+    div_inner.appendChild(df);
+    div_out.appendChild(div_inner);
+    t.appendChild(div_out);
+
+
+    document.onkeydown = keydown;
+    document.onkeyup = releaseFunction;
+
+    function keydown(e) {
+      if (!keyStatus[16]) {
+        document.getElementById("a").textContent = all_type++;
+      }
+      //大文字か小文字か判定
+      if (arr_ans[ply_num][ct] > 1000) {
+        let n = arr_ans[ply_num][ct] - 1000;
+        keyStatus[e.keyCode] = true;
+        if (keyStatus[n] && keyStatus[16]) { // 押された文字とshiftがtrueなら
+          match++;
+          ct += 2;
+          let newElm = document.querySelector(".before");
+          newElm.className = "after";
+        }
+      } else { //大文字でない場合
+        let keyCode = e.keyCode;
+        if (keyCode == 16) { //shiftが押されていたらtrueを代入
+          keyStatus[e.keyCode] = true;
+        }
+        //入力されたkeycodeを比較
+        if (keyCode == arr_ans[ply_num][ct] && !keyStatus[16]) { //shiftが押されていないかどうかも比較
+          ct += 2;
+          document.getElementById("b").textContent = match++;
+          let newElm = document.querySelector(".before");
+          newElm.className = "after";
+          //全て文字が入力されたら
+          if (arr_ans[ply_num].length < ct) {
+            ply_num++;
+            ct = 1;
+            //DOMを削除
+            const target = document.getElementById("main-center");
+            while (target.firstChild) {
+              target.removeChild(target.firstChild);
+            }
+            //0.5秒ごとに繰り返す
+            setTimeout(init, 500);
+          }
+        }
+      }
+    }
+
+    function releaseFunction(e) {
+      keyStatus[e.keyCode] = false; // 該当のキーコードをfalseにする
+    }
+  }
+
+  let startTimer = () => {
+    timerId = setInterval(tick, 1000);
+  }
+
+  let tick = () => {
+    timer_ct--;
+    if (timer_ct == 0) {
+      clearInterval(timerId);
+      result();
+    }
+    document.getElementById("counter").textContent = "残り" + timer_ct + "秒";
+  }
+
+  let result = () => {
+    const target = document.getElementById("content");
+    while (target.firstChild) {
+      target.removeChild(target.firstChild);
+    }
+    let ms_type = all_type - match;
+    document.getElementById("result").style.display = "block";
+    document.getElementById("score1").textContent = "正しく入力した数：" + match;
+    document.getElementById("score2").textContent = "ミスタイプ数：" + ms_type;
+
+  }
+
+  </script>
+</head>
+
+<body onload="start()">
+  <div id="content">
+    <div id="main-center">
+      <div id="title_start">
+        <h1 id="first_start">スペースキーを押すとスタートします</h1>
+      </div>
+    </div>
+    <div class="Multi_panel">
+      <div id="counter"></div>
+      <div id="a"></div>
+      <div id="b"></div>
+    </div>
+  </div>
+  <div id="result" style="display: none;">
+    <h1 id="score1"></h1>
+    <h1 id="score2"></h1>
+    <div class="toTop_posi">
+      <a href="main.html" class="toTop">topへ</a>
+    </div>
+  </div>
+
+<script type="text/javascript" src="JSファイルのパス"></script>
+</body>
+
+</html>
