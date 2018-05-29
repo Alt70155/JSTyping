@@ -94,7 +94,7 @@ let init = () => {
     arr_ans = arr_prob;
   }
 
-  let t = document.getElementById("main-center");
+  let main_center = document.getElementById("main-center");
 
   let div_out = document.createElement("div");
   div_out.className = "out";
@@ -111,7 +111,7 @@ let init = () => {
   }
   div_inner.appendChild(df);
   div_out.appendChild(div_inner);
-  t.appendChild(div_out);
+  main_center.appendChild(div_out);
 
 
   document.onkeydown = keydown;
@@ -133,7 +133,7 @@ let init = () => {
       }
     } else { //大文字でない場合
       let keyCode = e.keyCode;
-      if (keyCode == 16) { //shiftが押されていたらtrueを代入
+      if (keyCode == 16) { //shiftが押されていたらtrueを代入する
         keyStatus[e.keyCode] = true;
       }
       //入力されたkeycodeが正しいかとshiftが押されていないかどうか比較
