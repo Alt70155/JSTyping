@@ -60,7 +60,7 @@ let timer_ct = 60;
 
 //二次元配列で取り出す数値が奇数か偶数かによって問題の文字列と該当するkeyCodeが取得できる
 
-//Fisher–Yatesシャッフルアルゴリズムを使った配列シャッフル・参考書を丸パクりましたｽｲﾏｾﾝ
+//Fisher–Yatesシャッフルアルゴリズムを使った配列シャッフル・参考書を丸パクリしました
 Array.prototype.shuffle = function() {
   let w = this.length;
   while (w) {
@@ -80,7 +80,7 @@ let start = () => {
   document.onkeydown = keydown;
 
   function keydown(e) {
-    if (e.keyCode === SPACE_KEY_CODE) { //スペースが押されたら開始
+    if (e.keyCode === SPACE_KEY_CODE) {
       nodeDelete("main-center");
       startTimer();
       document.getElementById("counter").textContent = "Time: " + timer_ct + "s";
@@ -90,7 +90,7 @@ let start = () => {
 }
 
 let init = () => {
-  if (play_num === 4) { //playしている行数が4を超えたら普通の問題を出す
+  if (play_num === 4) { //playしている行数が4を超えたらarr_ansの中身を更新し、普通の問題を出す
     arr_ans = arr_prob;
   }
   createNode();
@@ -100,7 +100,7 @@ let init = () => {
 
 function keydown(e) {
   let targetCharCode = arr_ans[play_num][CharCodeIndex];
-  if (!keyStatus[SHIFT_KEY_CODE]) { //shiftがfalseの時のみカウントアップ
+  if (!keyStatus[SHIFT_KEY_CODE) { //shiftがfalseの時のみカウントアップ
     charTypingCnt++;
   }
   //大文字か小文字か判定
