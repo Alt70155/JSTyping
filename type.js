@@ -47,10 +47,12 @@ let arr_prob = [
 
 let arr_ans = [];
 
+//二次元配列で取り出す数値が奇数か偶数かによって問題の文字列と該当するkeyCodeが取得できる
+
 let keyStatus = []; //shiftがtrueかfalseかを格納する配列
 let play_num = 0; //二次元配列での問題の列のnumber
 let ct = 1; //何文字目かのカウント
-let match = 0; //正しく入力した数
+let CorrectTypeCnt = 0; //正しく入力した数
 let all_type = 0; //すべての入力数
 let timerId = NaN;
 let timer_ct = 60; //60秒制限
@@ -68,7 +70,7 @@ Array.prototype.shuffle = function() {
 }
 
 let start = () => {
-  easy_ans.shuffle(); //startが実行されたら配列をシャッフルー序盤は簡単な問題のみ
+  easy_ans.shuffle(); //startが実行されたら配列をシャッフルー序盤は簡単な問題のみ出題
   arr_prob.shuffle(); //メインの問題がある配列もシャッフル
   arr_ans = easy_ans;
 
@@ -76,11 +78,8 @@ let start = () => {
 
   function keydown(e) {
     let keyCode = e.keyCode;
-    if (keyCode == 32) { //エンターが押されたら開始
-      const target = document.getElementById("main-center"); //最初にmain-center以下のDOMを削除
-      while (target.firstChild) {
-        target.removeChild(target.firstChild);
-      }
+    if (keyCode === 32) { //スペースが押されたら開始
+      nodeDelete("main-center");
       document.getElementById("counter").textContent = "Time: " + timer_ct + "s";
       startTimer();
       init();
@@ -90,29 +89,10 @@ let start = () => {
 }
 
 let init = () => {
-  if (play_num == 4) { //play数が4を超えたら普通の問題を出す
+  if (play_num === 4) { //playしている行数が4を超えたら普通の問題を出す
     arr_ans = arr_prob;
   }
-
-  let main_center = document.getElementById("main-center");
-
-  let div_out = document.createElement("div");
-  div_out.className = "out";
-
-  let div_inner = document.createElement("div");
-  div_inner.className = "inner";
-
-  let df = document.createDocumentFragment();
-  for (let i = 0; i < arr_ans[play_num].length; i += 2) {
-    let elm = document.createElement("span");
-    elm.className = "before";
-    elm.appendChild(document.createTextNode(arr_ans[play_num][i])); //二次元配列から一文字ずつ取り出してツリーに追加
-    df.appendChild(elm);
-  }
-  div_inner.appendChild(df);
-  div_out.appendChild(div_inner);
-  main_center.appendChild(div_out);
-
+  createNode();
 
   document.onkeydown = keydown;
   document.onkeyup = releaseFunction;
@@ -126,32 +106,21 @@ let init = () => {
       let n = arr_ans[play_num][ct] - 1000;
       keyStatus[e.keyCode] = true;
       if (keyStatus[n] && keyStatus[16]) { // 押された文字とshiftがtrueなら
-        match++;
-        ct += 2;
-        let newElm = document.querySelector(".before");
-        newElm.className = "after";
+        ifCorrectFunc();
       }
-    } else { //大文字でない場合
+    } else {
       let keyCode = e.keyCode;
-      if (keyCode == 16) { //shiftが押されていたらtrueを代入する
+      if (keyCode === 16) { //shiftが押されていたらtrueを代入する
         keyStatus[e.keyCode] = true;
       }
       //入力されたkeycodeが正しいかとshiftが押されていないかどうか比較
-      if (keyCode == arr_ans[play_num][ct] && !keyStatus[16]) {
-        ct += 2;
-        match++;
-        let newElm = document.querySelector(".before"); //classがbeforeのものを取得してafterに変更
-        newElm.className = "after";
+      if (keyCode === arr_ans[play_num][ct] && !keyStatus[16]) {
+        ifCorrectFunc();
         //全て文字が入力されたら
         if (arr_ans[play_num].length < ct) {
-          play_num++; //問題の列をカウントアップ
+          play_num++;
           ct = 1;
-          //DOMを削除
-          const target = document.getElementById("main-center");
-          while (target.firstChild) {
-            target.removeChild(target.firstChild);
-          }
-          //0.5秒ごとに繰り返す
+          nodeDelete("main-center");
           setTimeout(init, 500);
         }
       }
@@ -159,7 +128,40 @@ let init = () => {
   }
 
   function releaseFunction(e) {
-    keyStatus[e.keyCode] = false; // 該当のキーコードをfalseにする
+    keyStatus[e.keyCode] = false;
+  }
+}
+
+let createNode = () => { //DOM再構成と問題文の表示
+  let main_center = document.getElementById("main-center");
+  let div_out = document.createElement("div");
+  div_out.className = "out";
+  let div_inner = document.createElement("div");
+  div_inner.className = "inner";
+
+  let df = document.createDocumentFragment();
+  for (let i = 0; i < arr_ans[play_num].length; i += 2) {
+    let elm = document.createElement("span");
+    elm.className = "before";
+    elm.appendChild(document.createTextNode(arr_ans[play_num][i]));
+    df.appendChild(elm);
+  }
+  div_inner.appendChild(df);
+  div_out.appendChild(div_inner);
+  main_center.appendChild(div_out);
+}
+
+let ifCorrectFunc = () => {
+  ct += 2;
+  CorrectTypeCnt++;
+  let newElm = document.querySelector(".before");
+  newElm.className = "after";
+}
+
+let nodeDelete = (x) => {
+  let target = document.getElementById(x);
+  while (target.firstChild) {
+    target.removeChild(target.firstChild);
   }
 }
 
@@ -169,7 +171,7 @@ let startTimer = () => {
 
 let tick = () => {
   timer_ct--;
-  if (timer_ct == 0) {
+  if (timer_ct === 0) {
     clearInterval(timerId);
     result();
   }
@@ -177,12 +179,9 @@ let tick = () => {
 }
 
 let result = () => {
-  const target = document.getElementById("content");
-  while (target.firstChild) {
-    target.removeChild(target.firstChild);
-  }
-  let ms_type = all_type - match;
+  nodeDelete("content");
+  let ms_type = all_type - CorrectTypeCnt;
   document.getElementById("result").style.display = "block";
-  document.getElementById("score1").textContent = "正しく入力した数：" + match;
+  document.getElementById("score1").textContent = "正しく入力した数：" + CorrectTypeCnt;
   document.getElementById("score2").textContent = "ミスタイプ数：" + ms_type;
 }
