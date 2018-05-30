@@ -48,12 +48,13 @@ let arr_prob = [
 
 let arr_ans = [];
 
-const SHIFT_KEY_CODE = 16
+const SHIFT_KEY_CODE = 16;
+const SPACE_KEY_CODE = 32;
 let keyStatus = []; //shiftがtrueかfalseかを格納する配列
 let play_num = 0; //二次元配列での問題の列のnumber
 let CharCodeIndex = 1; //何文字目かのカウント
 let CorrectTypeCnt = 0; //正しく入力した数
-let all_type = 0; //すべての入力数
+let charTypingCnt = 0; //すべての入力数
 let timerId = NaN;
 let timer_ct = 60;
 
@@ -79,15 +80,13 @@ let start = () => {
   document.onkeydown = keydown;
 
   function keydown(e) {
-    let keyCode = e.keyCode;
-    if (keyCode === 32) { //スペースが押されたら開始
+    if (e.keyCode === SPACE_KEY_CODE) { //スペースが押されたら開始
       nodeDelete("main-center");
       startTimer();
       document.getElementById("counter").textContent = "Time: " + timer_ct + "s";
       init();
     }
   }
-
 }
 
 let init = () => {
@@ -100,12 +99,13 @@ let init = () => {
 }
 
 function keydown(e) {
+  let targetCharCode = arr_ans[play_num][CharCodeIndex];
   if (!keyStatus[SHIFT_KEY_CODE]) { //shiftがfalseの時のみカウントアップ
-    all_type++;
+    charTypingCnt++;
   }
   //大文字か小文字か判定
-  if (arr_ans[play_num][CharCodeIndex] > 1000) { //大文字の区別としてkeyCodeに+1000してあるため、そこで判定
-    let n = arr_ans[play_num][CharCodeIndex] - 1000;
+  if (targetCharCode > 1000) { //大文字の区別としてkeyCodeに+1000してあるため、そこで判定
+    let n = targetCharCode - 1000;
     keyStatus[e.keyCode] = true;
     if (keyStatus[n] && keyStatus[SHIFT_KEY_CODE]) { // 押された文字とshiftがtrueなら
       ifCorrectFunc();
@@ -116,7 +116,7 @@ function keydown(e) {
       keyStatus[e.keyCode] = true;
     }
     //入力されたkeycodeが正しいかとshiftが押されていないかどうか比較
-    if (keyCode === arr_ans[play_num][CharCodeIndex] && !keyStatus[SHIFT_KEY_CODE]) {
+    if (keyCode === targetCharCode && !keyStatus[SHIFT_KEY_CODE]) {
       ifCorrectFunc();
       //全て文字が入力されたら
       if (arr_ans[play_num].length < CharCodeIndex) {
@@ -124,6 +124,8 @@ function keydown(e) {
         CharCodeIndex = 1;
         nodeDelete("main-center");
         setTimeout(init, 500);
+        //寿司打を参考にして、少し遅く出るようにしました。
+        //全然なくてもいいなあと思いますが一応似せました
       }
     }
   }
@@ -176,14 +178,15 @@ let tick = () => {
   timer_ct--;
   if (timer_ct === 0) {
     clearInterval(timerId);
-    result();
+    showResult();
+  } else {
+    document.getElementById("counter").textContent = "Time: " + timer_ct + "s";
   }
-  document.getElementById("counter").textContent = "Time: " + timer_ct + "s";
 }
 
-let result = () => {
+let showResult = () => {
   nodeDelete("content");
-  let ms_type = all_type - CorrectTypeCnt;
+  let ms_type = charTypingCnt - CorrectTypeCnt;
   document.getElementById("result").style.display = "block";
   document.getElementById("score1").textContent = "正しく入力した数：" + CorrectTypeCnt;
   document.getElementById("score2").textContent = "ミスタイプ数：" + ms_type;
