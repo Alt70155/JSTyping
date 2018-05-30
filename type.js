@@ -24,7 +24,8 @@ let arr_prob = [
   ["d", 68, "o", 79, "c", 67, "u", 85, "m", 77, "e", 69, "n", 78, "t", 84, ".", 190, "c", 67, "r", 82, "e", 69, "a", 65, "t", 84, "e", 69, "E", 1069, "l", 76, "e", 69, "m", 77, "e", 69, "n", 78, "t", 84],
   ["d", 68, "o", 79, "c", 67, "u", 85, "m", 77, "e", 69, "n", 78, "t", 84, ".", 190, "b", 66, "o", 79, "d", 68, "y", 89, ".", 190, "a", 65, "p", 80, "p", 80, "e", 69, "n", 78, "d", 68, "C", 1067, "h", 72, "i", 73, "l", 76, "d", 68],
   ["d", 68, "o", 79, "c", 67, "u", 85, "m", 77, "e", 69, "n", 78, "t", 84, ".", 190, "g", 71, "e", 69, "t", 84, "E", 1069, "l", 76, "e", 69, "m", 77, "e", 69, "n", 78, "t", 84, "s", 83, "B", 1066, "y", 89, "T", 1084, "a", 65, "g", 71, "N",
-    1078, "a", 65, "m", 77, "e", 69],
+    1078, "a", 65, "m", 77, "e", 69
+  ],
   ["t", 84, "e", 69, "x", 88, "t", 84, "C", 1067, "o", 79, "n", 78, "t", 84, "e", 69, "n", 78, "t", 84],
   ["u", 85, "n", 78, "d", 68, "e", 69, "f", 70, "i", 73, "n", 78, "e", 69, "d", 68],
   ["w", 87, "i", 73, "n", 78, "d", 68, "o", 79, "w", 87, ".", 190, "o", 79, "n", 78, "l", 76, "o", 79, "a", 65, "d", 68],
@@ -50,7 +51,7 @@ let arr_ans = [];
 const SHIFT_KEY_CODE = 16
 let keyStatus = []; //shiftがtrueかfalseかを格納する配列
 let play_num = 0; //二次元配列での問題の列のnumber
-let ct = 1; //何文字目かのカウント
+let CharCodeIndex = 1; //何文字目かのカウント
 let CorrectTypeCnt = 0; //正しく入力した数
 let all_type = 0; //すべての入力数
 let timerId = NaN;
@@ -58,7 +59,7 @@ let timer_ct = 60;
 
 //二次元配列で取り出す数値が奇数か偶数かによって問題の文字列と該当するkeyCodeが取得できる
 
-//Fisher–Yatesシャッフルアルゴリズムを使った配列シャッフル
+//Fisher–Yatesシャッフルアルゴリズムを使った配列シャッフル・参考書を丸パクりましたｽｲﾏｾﾝ
 Array.prototype.shuffle = function() {
   let w = this.length;
   while (w) {
@@ -67,15 +68,9 @@ Array.prototype.shuffle = function() {
     this[w] = this[j];
     this[j] = t;
   }
-  return this;
 }
 
 let start = () => {
-  let keyStatus = []; //shiftがtrueかfalseかを格納する配列
-  let play_num = 0; //二次元配列での問題の列のnumber
-  let ct = 1; //何文字目かのカウント
-  let CorrectTypeCnt = 0; //正しく入力した数
-  let all_type = 0; //すべての入力数
 
   easy_ans.shuffle(); //startが実行されたら配列をシャッフルー序盤は簡単な問題のみ出題
   arr_prob.shuffle(); //メインの問題がある配列もシャッフル
@@ -100,46 +95,46 @@ let init = () => {
     arr_ans = arr_prob;
   }
   createNode();
-
   document.onkeydown = keydown;
   document.onkeyup = releaseFunction;
+}
 
-  function keydown(e) {
-    if (!keyStatus[SHIFT_KEY_CODE]) { //shiftがfalseの時のみカウントアップ
-      all_type++;
-    }
-    //大文字か小文字か判定
-    if (arr_ans[play_num][ct] > 1000) { //大文字の区別としてkeyCodeに+1000してあるため、そこで判定
-      let n = arr_ans[play_num][ct] - 1000;
-      keyStatus[e.keyCode] = true;
-      if (keyStatus[n] && keyStatus[SHIFT_KEY_CODE]) { // 押された文字とshiftがtrueなら
-        ifCorrectFunc();
-      }
-    } else {
-      let keyCode = e.keyCode;
-      if (keyCode === SHIFT_KEY_CODE) { //shiftが押されていたらtrueを代入する
-        keyStatus[e.keyCode] = true;
-      }
-      //入力されたkeycodeが正しいかとshiftが押されていないかどうか比較
-      if (keyCode === arr_ans[play_num][ct] && !keyStatus[SHIFT_KEY_CODE]) {
-        ifCorrectFunc();
-        //全て文字が入力されたら
-        if (arr_ans[play_num].length < ct) {
-          play_num++;
-          ct = 1;
-          nodeDelete("main-center");
-          setTimeout(init, 500);
-        }
-      }
-    }
+function keydown(e) {
+  if (!keyStatus[SHIFT_KEY_CODE]) { //shiftがfalseの時のみカウントアップ
+    all_type++;
   }
-
-  function releaseFunction(e) {
-    keyStatus[e.keyCode] = false;
+  //大文字か小文字か判定
+  if (arr_ans[play_num][CharCodeIndex] > 1000) { //大文字の区別としてkeyCodeに+1000してあるため、そこで判定
+    let n = arr_ans[play_num][CharCodeIndex] - 1000;
+    keyStatus[e.keyCode] = true;
+    if (keyStatus[n] && keyStatus[SHIFT_KEY_CODE]) { // 押された文字とshiftがtrueなら
+      ifCorrectFunc();
+    }
+  } else {
+    let keyCode = e.keyCode;
+    if (keyCode === SHIFT_KEY_CODE) { //shiftが押されていたらtrueを代入する
+      keyStatus[e.keyCode] = true;
+    }
+    //入力されたkeycodeが正しいかとshiftが押されていないかどうか比較
+    if (keyCode === arr_ans[play_num][CharCodeIndex] && !keyStatus[SHIFT_KEY_CODE]) {
+      ifCorrectFunc();
+      //全て文字が入力されたら
+      if (arr_ans[play_num].length < CharCodeIndex) {
+        play_num++;
+        CharCodeIndex = 1;
+        nodeDelete("main-center");
+        setTimeout(init, 500);
+      }
+    }
   }
 }
 
-let createNode = () => { //DOM再構成と問題文の表示
+function releaseFunction(e) {
+  keyStatus[e.keyCode] = false;
+}
+
+//DOM再構成と問題文の表示
+let createNode = () => {
   let main_center = document.getElementById("main-center");
   let div_out = document.createElement("div");
   div_out.className = "out";
@@ -160,7 +155,7 @@ let createNode = () => { //DOM再構成と問題文の表示
 }
 
 let ifCorrectFunc = () => {
-  ct += 2;
+  CharCodeIndex += 2;
   CorrectTypeCnt++;
   let newElm = document.querySelector(".before");
   newElm.className = "after";
