@@ -47,15 +47,16 @@ let arr_prob = [
 
 let arr_ans = [];
 
-//二次元配列で取り出す数値が奇数か偶数かによって問題の文字列と該当するkeyCodeが取得できる
-
+const SHIFT_KEY_CODE = 16
 let keyStatus = []; //shiftがtrueかfalseかを格納する配列
 let play_num = 0; //二次元配列での問題の列のnumber
 let ct = 1; //何文字目かのカウント
 let CorrectTypeCnt = 0; //正しく入力した数
 let all_type = 0; //すべての入力数
 let timerId = NaN;
-let timer_ct = 60; //60秒制限
+let timer_ct = 60;
+
+//二次元配列で取り出す数値が奇数か偶数かによって問題の文字列と該当するkeyCodeが取得できる
 
 //Fisher–Yatesシャッフルアルゴリズムを使った配列シャッフル
 Array.prototype.shuffle = function() {
@@ -70,6 +71,12 @@ Array.prototype.shuffle = function() {
 }
 
 let start = () => {
+  let keyStatus = []; //shiftがtrueかfalseかを格納する配列
+  let play_num = 0; //二次元配列での問題の列のnumber
+  let ct = 1; //何文字目かのカウント
+  let CorrectTypeCnt = 0; //正しく入力した数
+  let all_type = 0; //すべての入力数
+
   easy_ans.shuffle(); //startが実行されたら配列をシャッフルー序盤は簡単な問題のみ出題
   arr_prob.shuffle(); //メインの問題がある配列もシャッフル
   arr_ans = easy_ans;
@@ -80,8 +87,8 @@ let start = () => {
     let keyCode = e.keyCode;
     if (keyCode === 32) { //スペースが押されたら開始
       nodeDelete("main-center");
-      document.getElementById("counter").textContent = "Time: " + timer_ct + "s";
       startTimer();
+      document.getElementById("counter").textContent = "Time: " + timer_ct + "s";
       init();
     }
   }
@@ -98,23 +105,23 @@ let init = () => {
   document.onkeyup = releaseFunction;
 
   function keydown(e) {
-    if (!keyStatus[16]) { //shiftがfalseの時のみカウントアップ
+    if (!keyStatus[SHIFT_KEY_CODE]) { //shiftがfalseの時のみカウントアップ
       all_type++;
     }
     //大文字か小文字か判定
     if (arr_ans[play_num][ct] > 1000) { //大文字の区別としてkeyCodeに+1000してあるため、そこで判定
       let n = arr_ans[play_num][ct] - 1000;
       keyStatus[e.keyCode] = true;
-      if (keyStatus[n] && keyStatus[16]) { // 押された文字とshiftがtrueなら
+      if (keyStatus[n] && keyStatus[SHIFT_KEY_CODE]) { // 押された文字とshiftがtrueなら
         ifCorrectFunc();
       }
     } else {
       let keyCode = e.keyCode;
-      if (keyCode === 16) { //shiftが押されていたらtrueを代入する
+      if (keyCode === SHIFT_KEY_CODE) { //shiftが押されていたらtrueを代入する
         keyStatus[e.keyCode] = true;
       }
       //入力されたkeycodeが正しいかとshiftが押されていないかどうか比較
-      if (keyCode === arr_ans[play_num][ct] && !keyStatus[16]) {
+      if (keyCode === arr_ans[play_num][ct] && !keyStatus[SHIFT_KEY_CODE]) {
         ifCorrectFunc();
         //全て文字が入力されたら
         if (arr_ans[play_num].length < ct) {
@@ -139,6 +146,7 @@ let createNode = () => { //DOM再構成と問題文の表示
   let div_inner = document.createElement("div");
   div_inner.className = "inner";
 
+  //createDocumentFragmentはパフォーマンスがcreateElementより良いと聞いたので変更しました
   let df = document.createDocumentFragment();
   for (let i = 0; i < arr_ans[play_num].length; i += 2) {
     let elm = document.createElement("span");
