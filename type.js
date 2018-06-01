@@ -55,8 +55,10 @@ let play_num = 0; //二次元配列での問題の列のnumber
 let CharCodeIndex = 1; //何文字目かのカウント
 let CorrectTypeCnt = 0; //正しく入力した数
 let charTypingCnt = 0; //すべての入力数
+let missTypeCnt = 0;
 let timerId = NaN;
 let timer_ct = 60;
+let lineLen = 0;
 
 //二次元配列で取り出す数値が奇数か偶数かによって問題の文字列と該当するkeyCodeが取得できる
 
@@ -100,7 +102,7 @@ let init = () => {
 
 function keydown(e) {
   let targetCharCode = arr_ans[play_num][CharCodeIndex];
-  if (!keyStatus[SHIFT_KEY_CODE) { //shiftがfalseの時のみカウントアップ
+  if (!keyStatus[SHIFT_KEY_CODE]) { //shiftがfalseの時のみカウントアップ
     charTypingCnt++;
   }
   //大文字か小文字か判定
@@ -108,6 +110,7 @@ function keydown(e) {
     let n = targetCharCode - 1000;
     keyStatus[e.keyCode] = true;
     if (keyStatus[n] && keyStatus[SHIFT_KEY_CODE]) { // 押された文字とshiftがtrueなら
+      meterJudge();
       ifCorrectFunc();
     }
   } else {
@@ -117,6 +120,7 @@ function keydown(e) {
     }
     //入力されたkeycodeが正しいかとshiftが押されていないかどうか比較
     if (keyCode === targetCharCode && !keyStatus[SHIFT_KEY_CODE]) {
+      meterJudge();
       ifCorrectFunc();
       //全て文字が入力されたら
       if (arr_ans[play_num].length < CharCodeIndex) {
@@ -130,6 +134,7 @@ function keydown(e) {
     }
   }
 }
+
 
 function releaseFunction(e) {
   keyStatus[e.keyCode] = false;
@@ -190,4 +195,33 @@ let showResult = () => {
   document.getElementById("result").style.display = "block";
   document.getElementById("score1").textContent = "正しく入力した数：" + CorrectTypeCnt;
   document.getElementById("score2").textContent = "ミスタイプ数：" + ms_type;
+}
+
+let meterRedraw = () => {
+  let canvas = document.getElementById('canvas');
+  let ctx = canvas.getContext('2d');
+  ctx.strokeStyle = "black";
+  ctx.fillStyle = "#00FF00";
+  ctx.lineWidth = 5;
+  ctx.lineCap = "butt";
+  ctx.beginPath();
+  ctx.moveTo(0, 75);
+  ctx.lineTo(lineLen, 75);
+  ctx.stroke();
+}
+
+let meterJudge = () => {
+  if(charTypingCnt - CorrectTypeCnt == missTypeCnt) {
+    lineLen = lineLen + 10
+    if(lineLen >= 650){
+      lineLen = 0;
+    }
+  } else {
+    lineLen = 0;
+    let canvas = document.getElementById('canvas');
+    let ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    missTypeCnt = charTypingCnt - CorrectTypeCnt;
+  }
+  meterRedraw();
 }
