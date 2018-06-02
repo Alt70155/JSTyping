@@ -9,19 +9,29 @@
   let init = () => {
     document.onkeydown = keydown;
     document.onkeyup = releaseFunction;
-    let isPushedShiftKey;
+    let isPushedShiftKey = false;
     let isPushedKey;
     let targetCharCode = 32;
     function keydown(e) {
-      isPushedShiftKey = e.keyCode === 16;
-      document.getElementById("a").textContent = isPushedShiftKey;
-      if(e.keyCode == targetCharCode && isPushedShiftKey){
-            document.getElementById("b").textContent = "hello world";
+      if(e.keyCode === 16) {
+        isPushedShiftKey = true;
+        document.getElementById("a").textContent = isPushedShiftKey;
+      }
+      if(e.keyCode === targetCharCode) {
+        isPushedKey = true;
+        document.getElementById("b").textContent = isPushedKey;
+      }
+      if(isPushedKey && isPushedShiftKey) {
+        document.getElementById("c").textContent = "hello world";
       }
     }
       function releaseFunction(e) {
-        isPushedShiftKey = false;
-        document.getElementById("a").textContent = isPushedShiftKey;
+        if(e.keyCode === 16) {
+          isPushedShiftKey = false;
+          document.getElementById("a").textContent = isPushedShiftKey;
+        }
+        isPushedKey = false;
+        document.getElementById("b").textContent = isPushedKey;
       }
     }
   </script>
@@ -30,6 +40,7 @@
 <body onload="init()">
   <div id="a"></div>
   <div id="b"></div>
+  <div id="c"></div>
 </body>
 
 </html>
