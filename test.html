@@ -21,6 +21,10 @@
         isPushedKey = true;
         document.getElementById("b").textContent = isPushedKey;
       }
+      if(!isPushedShiftKey === isPushedKey) { //先にshift以外が押された場合falseに
+        isPushedKey = false;
+        document.getElementById("b").textContent = isPushedKey;
+      }
       if(isPushedKey && isPushedShiftKey) {
         document.getElementById("c").textContent = "hello world";
       }
