@@ -57,6 +57,8 @@ let missTypeCnt = 0;
 let timerId = NaN;
 let timer_ct = 60;
 let lineLen = 0;
+let isPushedShiftKey = false;
+let isPushedKey = false;
 
 //二次元配列で取り出す数値が奇数か偶数かによって問題の文字列と該当するkeyCodeが取得できる
 
@@ -100,24 +102,28 @@ let init = () => {
 function keydown(e) {
   const SHIFT_KEY_CODE = 16;
   let targetCharCode = arr_ans[play_num][CharCodeIndex];
-  if (!keyStatus[SHIFT_KEY_CODE]) { //shiftがfalseの時のみカウントアップ
+  if (!isPushedShiftKey) { //shiftがfalseの時のみカウントアップ
     charTypingCnt++;
   }
   //大文字か小文字か判定
   if (targetCharCode > 1000) { //大文字の区別としてkeyCodeに+1000してあるため、そこで判定
     let n = targetCharCode - 1000;
-    keyStatus[e.keyCode] = true;
-    if (keyStatus[n] && keyStatus[SHIFT_KEY_CODE]) { // 押された文字とshiftがtrueなら
+    if(e.keyCode === SHIFT_KEY_CODE) {
+      isPushedShiftKey = true;
+    }
+    if(e.keyCode === n) {
+      isPushedKey = true;
+    }
+    if(!isPushedShiftKey === isPushedKey) { //先にshift以外が押された場合falseに
+      isPushedKey = false;
+    }
+    if(isPushedKey && isPushedShiftKey) {
       meterJudge();
       ifCorrectFunc();
     }
   } else {
-    let keyCode = e.keyCode;
-    if (keyCode === SHIFT_KEY_CODE) { //shiftが押されていたらtrueを代入する
-      keyStatus[e.keyCode] = true;
-    }
     //入力されたkeycodeが正しいかとshiftが押されていないかどうか比較
-    if (keyCode === targetCharCode && !keyStatus[SHIFT_KEY_CODE]) {
+    if (e.keyCode === targetCharCode && !isPushedShiftKey) {
       meterJudge();
       ifCorrectFunc();
       //全て文字が入力されたら
@@ -135,7 +141,10 @@ function keydown(e) {
 
 
 function releaseFunction(e) {
-  keyStatus[e.keyCode] = false;
+  if(e.keyCode === 16) {
+    isPushedShiftKey = false;
+  }
+  isPushedKey = false;
 }
 
 //DOM再構成と問題文の表示
