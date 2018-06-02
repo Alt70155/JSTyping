@@ -48,7 +48,6 @@ let arr_prob = [
 
 let arr_ans = [];
 
-let keyStatus = []; //shiftがtrueかfalseかを格納する配列
 let play_num = 0; //二次元配列での問題の列のnumber
 let CharCodeIndex = 1; //何文字目かのカウント
 let CorrectTypeCnt = 0; //正しく入力した数
@@ -105,6 +104,7 @@ function keydown(e) {
   if (!isPushedShiftKey) { //shiftがfalseの時のみカウントアップ
     charTypingCnt++;
   }
+  meterJudge();
   //大文字か小文字か判定
   if (targetCharCode > 1000) { //大文字の区別としてkeyCodeに+1000してあるため、そこで判定
     let n = targetCharCode - 1000;
@@ -118,13 +118,11 @@ function keydown(e) {
       isPushedKey = false;
     }
     if(isPushedKey && isPushedShiftKey) {
-      meterJudge();
       ifCorrectFunc();
     }
   } else {
     //入力されたkeycodeが正しいかとshiftが押されていないかどうか比較
     if (e.keyCode === targetCharCode && !isPushedShiftKey) {
-      meterJudge();
       ifCorrectFunc();
       //全て文字が入力されたら
       if (arr_ans[play_num].length < CharCodeIndex) {
@@ -198,10 +196,10 @@ let tick = () => {
 
 let showResult = () => {
   nodeDelete("content");
-  let ms_type = charTypingCnt - CorrectTypeCnt;
+  let missTypeResult = charTypingCnt - CorrectTypeCnt;
   document.getElementById("result").style.display = "block";
   document.getElementById("score1").textContent = "正しく入力した数：" + CorrectTypeCnt;
-  document.getElementById("score2").textContent = "ミスタイプ数：" + ms_type;
+  document.getElementById("score2").textContent = "ミスタイプ数：" + missTypeResult;
 }
 
 let meterRedraw = () => {
@@ -218,15 +216,15 @@ let meterRedraw = () => {
 }
 
 let meterJudge = () => {
-  if(charTypingCnt - CorrectTypeCnt == missTypeCnt) {
-    lineLen = lineLen + 10
-    if(lineLen >= 250){
-      lineLen = 0;
-    }
+  if(lineLen === 200) {
+    lineLen = 0;
+  }
+  if(charTypingCnt - CorrectTypeCnt === missTypeCnt) {
+    lineLen = lineLen + 10;
   } else {
     lineLen = 0;
-    let canvas = document.getElementById('canvas');
-    let ctx = canvas.getContext('2d');
+    let canvas = document.getElementById("canvas");
+    let ctx = canvas.getContext("2d");
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     missTypeCnt = charTypingCnt - CorrectTypeCnt;
   }
