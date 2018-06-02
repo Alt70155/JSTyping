@@ -48,8 +48,6 @@ let arr_prob = [
 
 let arr_ans = [];
 
-const SHIFT_KEY_CODE = 16;
-const SPACE_KEY_CODE = 32;
 let keyStatus = []; //shiftがtrueかfalseかを格納する配列
 let play_num = 0; //二次元配列での問題の列のnumber
 let CharCodeIndex = 1; //何文字目かのカウント
@@ -74,13 +72,12 @@ Array.prototype.shuffle = function() {
 }
 
 let start = () => {
-
   easy_ans.shuffle(); //startが実行されたら配列をシャッフルー序盤は簡単な問題のみ出題
   arr_prob.shuffle(); //メインの問題がある配列もシャッフル
   arr_ans = easy_ans;
 
   document.onkeydown = keydown;
-
+  const SPACE_KEY_CODE = 32;
   function keydown(e) {
     if (e.keyCode === SPACE_KEY_CODE) {
       nodeDelete("main-center");
@@ -101,6 +98,7 @@ let init = () => {
 }
 
 function keydown(e) {
+  const SHIFT_KEY_CODE = 16;
   let targetCharCode = arr_ans[play_num][CharCodeIndex];
   if (!keyStatus[SHIFT_KEY_CODE]) { //shiftがfalseの時のみカウントアップ
     charTypingCnt++;
@@ -213,7 +211,7 @@ let meterRedraw = () => {
 let meterJudge = () => {
   if(charTypingCnt - CorrectTypeCnt == missTypeCnt) {
     lineLen = lineLen + 10
-    if(lineLen >= 650){
+    if(lineLen >= 250){
       lineLen = 0;
     }
   } else {

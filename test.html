@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <style media="screen">
+  </style>
+  <script type="text/javascript">
+  let init = () => {
+    document.onkeydown = keydown;
+    document.onkeyup = releaseFunction;
+    let isPushedShiftKey;
+    let isPushedKey;
+    let targetCharCode = 32;
+    function keydown(e) {
+      isPushedShiftKey = e.keyCode === 16;
+      document.getElementById("a").textContent = isPushedShiftKey;
+      if(e.keyCode == targetCharCode && isPushedShiftKey){
+            document.getElementById("b").textContent = "hello world";
+      }
+    }
+      function releaseFunction(e) {
+        isPushedShiftKey = false;
+        document.getElementById("a").textContent = isPushedShiftKey;
+      }
+    }
+  </script>
+</head>
+
+<body onload="init()">
+  <div id="a"></div>
+  <div id="b"></div>
+</body>
+
+</html>
