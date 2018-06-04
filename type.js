@@ -210,6 +210,8 @@ let meterDraw = () => {
   }
   let meterMain = document.getElementById("meter_main");
   if(charTypingCnt - CorrectTypeCnt === missTypeCnt) {
+    //全て打ったキー数と正しく打ったキー数を比較し、差が無ければカウントアップ
+    //差が出たらカウントリセットし、missTypeCntに差を代入
     lineLen = lineLen + 5;
   } else {
     lineLen = 0;
@@ -221,7 +223,19 @@ let meterDraw = () => {
       document.getElementById("counter").textContent = "Time: " + timer_ct + "s";
       break;
     case 250:
+      timer_ct = timer_ct + 1;
+      document.getElementById("counter").textContent = "Time: " + timer_ct + "s";
+      break;
+    case 375:
       timer_ct = timer_ct + 2;
+      document.getElementById("counter").textContent = "Time: " + timer_ct + "s";
+      break;
+    case 500:
+      timer_ct = timer_ct + 2;
+      document.getElementById("counter").textContent = "Time: " + timer_ct + "s";
+      break;
+    case 625:
+      timer_ct = timer_ct + 3;
       document.getElementById("counter").textContent = "Time: " + timer_ct + "s";
       break;
   }

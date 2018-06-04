@@ -186,7 +186,7 @@ span {
   text-align: center;
 }
 
-.Multi_panel {
+#Multi_panel {
   border: 1px solid black;
   border-top: none;
   width: 650px;
@@ -209,23 +209,50 @@ span {
   height: 20px;
 }
 
-#meter1 {
+.mtr_common {
   border-right: 1px solid black;
   height: 7px;
-  width: 136px;
-  margin-bottom: -5px;
+  width: 124px;
+}
+
+#small_meter_panel {
+  display: flex;
+}
+
+#meter1 {
+  margin-left: 12px;
+}
+
+.mtr_txt_common {
+  font-size: 14px;
+  font-family: 'Noto Serif', serif;
+  width: 25px;
+  margin-top: 11px;
+  margin-left: 101px;
 }
 
 #meter1_txt {
+  /*border: 1px solid black;*/
   font-size: 14px;
   font-family: 'Noto Serif', serif;
   width: 25px;
   margin-left: 125px;
-  margin-top: -10px;
+  margin-top: 11px;
 }
 
 #meter_main {
   width: 0px; /*Max 625px;*/
   border-bottom: 10px solid black;
-  margin: 5px 5px auto 5px;
+  margin: 0px 5px auto 5px;
+}
+
+#nomiss_txt {
+  /*border: 1px solid black;*/
+  margin-top: -45px;
+  margin-left: 15px;
+  width: 100px;
+}
+
+#meter_txt_panel {
+  display: flex;
 }
