@@ -190,20 +190,42 @@ span {
   border: 1px solid black;
   border-top: none;
   width: 650px;
-  height: 70px;
+  height: 75px;
   margin: auto;
 }
 
 #counter {
-  /*border: 1px solid black;*/
   width: 120px;
-  height: 50px;
+  height: 35px;
   margin: auto;
   text-align: center;
   font-size: 25px;
   font-family: 'Noto Serif', serif;
 }
 
-#canvas {
-  margin-top: -70px;
+#meter_outside {
+  margin: auto;
+  width: 635px;
+  height: 20px;
+}
+
+#meter1 {
+  border-right: 1px solid black;
+  height: 7px;
+  width: 136px;
+  margin-bottom: -5px;
+}
+
+#meter1_txt {
+  font-size: 14px;
+  font-family: 'Noto Serif', serif;
+  width: 25px;
+  margin-left: 125px;
+  margin-top: -10px;
+}
+
+#meter_main {
+  width: 0px; /*Max 625px;*/
+  border-bottom: 10px solid black;
+  margin: 5px 5px auto 5px;
 }

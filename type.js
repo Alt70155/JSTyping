@@ -58,6 +58,8 @@ let timer_ct = 60;
 let lineLen = 0;
 let isPushedShiftKey = false;
 let isPushedKey = false;
+const SHIFT_KEY_CODE = 16;
+const SPACE_KEY_CODE = 32;
 
 //二次元配列で取り出す数値が奇数か偶数かによって問題の文字列と該当するkeyCodeが取得できる
 
@@ -78,7 +80,6 @@ let start = () => {
   arr_ans = easy_ans;
 
   document.onkeydown = keydown;
-  const SPACE_KEY_CODE = 32;
   function keydown(e) {
     if (e.keyCode === SPACE_KEY_CODE) {
       nodeDelete("main-center");
@@ -99,12 +100,10 @@ let init = () => {
 }
 
 function keydown(e) {
-  const SHIFT_KEY_CODE = 16;
   let targetCharCode = arr_ans[play_num][CharCodeIndex];
   if (!isPushedShiftKey) { //shiftがfalseの時のみカウントアップ
     charTypingCnt++;
   }
-  meterJudge();
   //大文字か小文字か判定
   if (targetCharCode > 1000) { //大文字の区別としてkeyCodeに+1000してあるため、そこで判定
     let n = targetCharCode - 1000;
@@ -119,6 +118,7 @@ function keydown(e) {
     }
     if(isPushedKey && isPushedShiftKey) {
       ifCorrectFunc();
+      meterDraw();
     }
   } else {
     //入力されたkeycodeが正しいかとshiftが押されていないかどうか比較
@@ -130,10 +130,12 @@ function keydown(e) {
         CharCodeIndex = 1;
         nodeDelete("main-center");
         setTimeout(init, 500);
-        //寿司打を参考にして、少し遅く出るようにしました。
-        //全然なくてもいいなあと思いますが一応似せました
+        //寿司打を参考にして、少し遅く出るように変更。
       }
     }
+  }
+  if(!isPushedShiftKey) {
+    meterDraw();
   }
 }
 
@@ -181,10 +183,10 @@ let nodeDelete = (x) => {
 }
 
 let startTimer = () => {
-  timerId = setInterval(tick, 1000);
+  timerId = setInterval(timerCountDown, 1000);
 }
 
-let tick = () => {
+let timerCountDown = () => {
   timer_ct--;
   if (timer_ct === 0) {
     clearInterval(timerId);
@@ -202,31 +204,26 @@ let showResult = () => {
   document.getElementById("score2").textContent = "ミスタイプ数：" + missTypeResult;
 }
 
-let meterRedraw = () => {
-  let canvas = document.getElementById('canvas');
-  let ctx = canvas.getContext('2d');
-  ctx.strokeStyle = "black";
-  ctx.fillStyle = "#00FF00";
-  ctx.lineWidth = 5;
-  ctx.lineCap = "butt";
-  ctx.beginPath();
-  ctx.moveTo(0, 75);
-  ctx.lineTo(lineLen, 75);
-  ctx.stroke();
-}
-
-let meterJudge = () => {
-  if(lineLen === 200) {
+let meterDraw = () => {
+  if(lineLen >= 625) {
     lineLen = 0;
   }
+  let meterMain = document.getElementById("meter_main");
   if(charTypingCnt - CorrectTypeCnt === missTypeCnt) {
-    lineLen = lineLen + 10;
+    lineLen = lineLen + 5;
   } else {
     lineLen = 0;
-    let canvas = document.getElementById("canvas");
-    let ctx = canvas.getContext("2d");
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
     missTypeCnt = charTypingCnt - CorrectTypeCnt;
   }
-  meterRedraw();
+  switch (lineLen) {
+    case 125:
+      timer_ct = timer_ct + 1;
+      document.getElementById("counter").textContent = "Time: " + timer_ct + "s";
+      break;
+    case 250:
+      timer_ct = timer_ct + 2;
+      document.getElementById("counter").textContent = "Time: " + timer_ct + "s";
+      break;
+  }
+  meterMain.style.width = lineLen + "px";
 }
