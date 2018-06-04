@@ -46,6 +46,8 @@ let arr_prob = [
   ["S", 1083, "t", 84, "r", 82, "i", 73, "n", 78, "g", 71, ".", 190, "p", 80, "r", 82, "o", 79, "t", 84, "o", 79, "t", 84, "y", 89, "p", 80, "e", 69, ".", 190, "i", 73, "n", 78, "d", 68, "e", 69, "x", 88, "O", 1079, "f", 70],
 ];
 
+//二次元配列で取り出す数値が奇数か偶数かによって問題の文字列と該当するkeyCodeが取得できる
+
 let arr_ans = [];
 
 let play_num = 0; //二次元配列での問題の列のnumber
@@ -55,15 +57,13 @@ let charTypingCnt = 0; //すべての入力数
 let missTypeCnt = 0;
 let timerId = NaN;
 let timer_ct = 60;
-let lineLen = 0;
+let lineLen = 0; //連打メーターの線の長さ
 let isPushedShiftKey = false;
 let isPushedKey = false;
 const SHIFT_KEY_CODE = 16;
 const SPACE_KEY_CODE = 32;
 
-//二次元配列で取り出す数値が奇数か偶数かによって問題の文字列と該当するkeyCodeが取得できる
-
-//Fisher–Yatesシャッフルアルゴリズムを使った配列シャッフル・参考書を丸パクリしました
+//Fisher–Yatesシャッフルアルゴリズムを使った配列シャッフル・参考書にあったので参考
 Array.prototype.shuffle = function() {
   let w = this.length;
   while (w) {
@@ -105,7 +105,8 @@ function keydown(e) {
     charTypingCnt++;
   }
   //大文字か小文字か判定
-  if (targetCharCode > 1000) { //大文字の区別としてkeyCodeに+1000してあるため、そこで判定
+  //大文字の区別としてkeyCodeに+1000してあるため、そこで判定
+  if (targetCharCode > 1000) {
     let n = targetCharCode - 1000;
     if(e.keyCode === SHIFT_KEY_CODE) {
       isPushedShiftKey = true;
@@ -155,7 +156,7 @@ let createNode = () => {
   let div_inner = document.createElement("div");
   div_inner.className = "inner";
 
-  //createDocumentFragmentはパフォーマンスがcreateElementより良いと聞いたので変更しました
+  //createDocumentFragmentはパフォーマンスがcreateElementより良いと聞いたので変更
   let df = document.createDocumentFragment();
   for (let i = 0; i < arr_ans[play_num].length; i += 2) {
     let elm = document.createElement("span");
@@ -209,9 +210,9 @@ let meterDraw = () => {
     lineLen = 0;
   }
   let meterMain = document.getElementById("meter_main");
+  //全て打ったキー数と正しく打ったキー数を引き算し、差が無ければカウントアップ
+  //差が出たらカウントリセットし、missTypeCntに差を代入
   if(charTypingCnt - CorrectTypeCnt === missTypeCnt) {
-    //全て打ったキー数と正しく打ったキー数を比較し、差が無ければカウントアップ
-    //差が出たらカウントリセットし、missTypeCntに差を代入
     lineLen = lineLen + 5;
   } else {
     lineLen = 0;
