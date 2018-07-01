@@ -62,7 +62,7 @@ let isPushedKey = false;
 const SHIFT_KEY_CODE = 16;
 const SPACE_KEY_CODE = 32;
 
-//Fisher–Yatesシャッフルアルゴリズムを使った配列シャッフル・参考書にあったので参考
+//Fisher–Yatesシャッフルアルゴリズムを使った配列シャッフル・参考書にあったので使用
 Array.prototype.shuffle = function() {
   let w = this.length;
   while (w) {
