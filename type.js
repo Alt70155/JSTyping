@@ -1,6 +1,8 @@
 "use strict";
 
-let easy_ans = [
+
+//二次元配列で取り出す数値が奇数か偶数かによって問題の文字列と該当するkeyCodeが取得できる
+let easyProblem = [
   ["n", 78, "u", 85, "l", 76, "l", 76],
   ["v", 86, "a", 65, "r", 82],
   ["l", 76, "e", 69, "t", 84],
@@ -13,7 +15,7 @@ let easy_ans = [
   ["r", 82, "e", 69, "t", 84, "u", 85, "r", 82, "n", 78],
 ];
 
-let arr_prob = [
+let commonProblem = [
   ["j", 74, "a", 65, "v", 86, "a", 65, "s", 83, "c", 67, "r", 82, "i", 73, "p", 80, "t", 84],
   ["d", 68, "o", 79, "c", 67, "u", 85, "m", 77, "e", 69, "n", 78, "t", 84, ".", 190, "w", 87, "r", 82, "i", 73, "t", 84, "e", 69],
   ["d", 68, "o", 79, "c", 67, "u", 85, "m", 77, "e", 69, "n", 78, "t", 84, ".", 190, "g", 71, "e", 69, "t", 84, "E", 1069, "l", 76, "e", 69, "m", 77, "e", 69, "n", 78, "t", 84, "B", 1066, "y", 89, "I", 1073, "d", 68],
@@ -46,17 +48,14 @@ let arr_prob = [
   ["S", 1083, "t", 84, "r", 82, "i", 73, "n", 78, "g", 71, ".", 190, "p", 80, "r", 82, "o", 79, "t", 84, "o", 79, "t", 84, "y", 89, "p", 80, "e", 69, ".", 190, "i", 73, "n", 78, "d", 68, "e", 69, "x", 88, "O", 1079, "f", 70],
 ];
 
-//二次元配列で取り出す数値が奇数か偶数かによって問題の文字列と該当するkeyCodeが取得できる
-
-let arr_ans = [];
-
-let play_num = 0; //二次元配列での問題の列のnumber
-let CharCodeIndex = 1; //何文字目かのカウント
-let CorrectTypeCnt = 0; //正しく入力した数
+let useProblem = [];
+let questionsNum = 0; //二次元配列での問題の列のnumber
+let charCodeIndex = 1; //何文字目かのカウント
+let correctTypeCnt = 0; //正しく入力した数
 let charTypingCnt = 0; //すべての入力数
 let missTypeCnt = 0;
 let timerId = NaN;
-let timer_ct = 60;
+let timerCt = 60;
 let lineLen = 0; //連打メーターの線の長さ
 let isPushedShiftKey = false;
 let isPushedKey = false;
@@ -75,24 +74,24 @@ Array.prototype.shuffle = function() {
 }
 
 let start = () => {
-  easy_ans.shuffle(); //startが実行されたら配列をシャッフルー序盤は簡単な問題のみ出題
-  arr_prob.shuffle(); //メインの問題がある配列もシャッフル
-  arr_ans = easy_ans;
+  easyProblem.shuffle(); //startが実行されたら配列をシャッフルー序盤は簡単な問題のみ出題
+  commonProblem.shuffle(); //メインの問題がある配列もシャッフル
+  useProblem = easyProblem;
 
   document.onkeydown = keydown;
   function keydown(e) {
     if (e.keyCode === SPACE_KEY_CODE) {
       nodeDelete("main-center");
       startTimer();
-      document.getElementById("counter").textContent = "Time: " + timer_ct + "s";
+      counter.textContent = "Time: " + correctTypeCnt + "s";
       init();
     }
   }
 }
 
 let init = () => {
-  if (play_num === 4) { //playしている行数が4を超えたらarr_ansの中身を更新し、普通の問題を出す
-    arr_ans = arr_prob;
+  if (questionsNum === 4) { //playしている行数が4を超えたらuseProblemの中身を更新し、普通の問題を出す
+    useProblem = commonProblem;
   }
   createNode();
   document.onkeydown = keydown;
@@ -100,7 +99,7 @@ let init = () => {
 }
 
 function keydown(e) {
-  let targetCharCode = arr_ans[play_num][CharCodeIndex];
+  let targetCharCode = useProblem[questionsNum][charCodeIndex];
   if (!isPushedShiftKey) { //shiftがfalseの時のみカウントアップ
     charTypingCnt++;
   }
@@ -119,16 +118,16 @@ function keydown(e) {
     }
     if(isPushedKey && isPushedShiftKey) {
       ifCorrectFunc();
-      meterDraw();
+      updateCorrectContinueBar();
     }
   } else {
     //入力されたkeycodeが正しいかとshiftが押されていないかどうか比較
     if (e.keyCode === targetCharCode && !isPushedShiftKey) {
       ifCorrectFunc();
       //全て文字が入力されたら
-      if (arr_ans[play_num].length < CharCodeIndex) {
-        play_num++;
-        CharCodeIndex = 1;
+      if (useProblem[questionsNum].length < charCodeIndex) {
+        questionsNum++;
+        charCodeIndex = 1;
         nodeDelete("main-center");
         setTimeout(init, 500);
         //寿司打を参考にして、少し遅く出るように変更。
@@ -136,7 +135,7 @@ function keydown(e) {
     }
   }
   if(!isPushedShiftKey) {
-    meterDraw();
+    updateCorrectContinueBar();
   }
 }
 
@@ -158,10 +157,10 @@ let createNode = () => {
 
   //createDocumentFragmentはパフォーマンスがcreateElementより良いと聞いたので変更
   let df = document.createDocumentFragment();
-  for (let i = 0; i < arr_ans[play_num].length; i += 2) {
+  for (let i = 0; i < useProblem[questionsNum].length; i += 2) {
     let elm = document.createElement("span");
     elm.className = "before";
-    elm.appendChild(document.createTextNode(arr_ans[play_num][i]));
+    elm.appendChild(document.createTextNode(useProblem[questionsNum][i]));
     df.appendChild(elm);
   }
   div_inner.appendChild(df);
@@ -170,8 +169,8 @@ let createNode = () => {
 }
 
 let ifCorrectFunc = () => {
-  CharCodeIndex += 2;
-  CorrectTypeCnt++;
+  charCodeIndex += 2;
+  correctTypeCnt++;
   let newElm = document.querySelector(".before");
   newElm.className = "after";
 }
@@ -188,56 +187,56 @@ let startTimer = () => {
 }
 
 let timerCountDown = () => {
-  timer_ct--;
-  if (timer_ct === 0) {
+  timerCt--;
+  if (timerCt === 0) {
     clearInterval(timerId);
     showResult();
   } else {
-    document.getElementById("counter").textContent = "Time: " + timer_ct + "s";
+    counter.textContent = "Time: " + timerCt + "s";
   }
 }
 
 let showResult = () => {
   nodeDelete("content");
-  let missTypeResult = charTypingCnt - CorrectTypeCnt;
+  let missTypeResult = charTypingCnt - correctTypeCnt;
   document.getElementById("result").style.display = "block";
-  document.getElementById("score1").textContent = "正しく入力した数：" + CorrectTypeCnt;
+  document.getElementById("score1").textContent = "正しく入力した数：" + correctTypeCnt;
   document.getElementById("score2").textContent = "ミスタイプ数：" + missTypeResult;
 }
 
-let meterDraw = () => {
+let updateCorrectContinueBar = () => {
   if(lineLen >= 625) {
     lineLen = 0;
   }
   let meterMain = document.getElementById("meter_main");
   //全て打ったキー数と正しく打ったキー数を引き算し、差が無ければカウントアップ
   //差が出たらカウントリセットし、missTypeCntに差を代入
-  if(charTypingCnt - CorrectTypeCnt === missTypeCnt) {
+  if(charTypingCnt - correctTypeCnt === missTypeCnt) {
     lineLen = lineLen + 5;
   } else {
     lineLen = 0;
-    missTypeCnt = charTypingCnt - CorrectTypeCnt;
+    missTypeCnt = charTypingCnt - correctTypeCnt;
   }
   switch (lineLen) {
     case 125:
-      timer_ct = timer_ct + 1;
-      document.getElementById("counter").textContent = "Time: " + timer_ct + "s";
+      timerCt = timerCt + 1;
+      counter.textContent = "Time: " + timerCt + "s";
       break;
     case 250:
-      timer_ct = timer_ct + 1;
-      document.getElementById("counter").textContent = "Time: " + timer_ct + "s";
+      timerCt = timerCt + 1;
+      counter.textContent = "Time: " + timerCt + "s";
       break;
     case 375:
-      timer_ct = timer_ct + 2;
-      document.getElementById("counter").textContent = "Time: " + timer_ct + "s";
+      timerCt = timerCt + 2;
+      counter.textContent = "Time: " + timerCt + "s";
       break;
     case 500:
-      timer_ct = timer_ct + 2;
-      document.getElementById("counter").textContent = "Time: " + timer_ct + "s";
+      timerCt = timerCt + 2;
+      counter.textContent = "Time: " + timerCt + "s";
       break;
     case 625:
-      timer_ct = timer_ct + 3;
-      document.getElementById("counter").textContent = "Time: " + timer_ct + "s";
+      timerCt = timerCt + 3;
+      counter.textContent = "Time: " + timerCt + "s";
       break;
   }
   meterMain.style.width = lineLen + "px";
