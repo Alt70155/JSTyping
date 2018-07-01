@@ -56,13 +56,14 @@ let charTypingCnt = 0; //すべての入力数
 let missTypeCnt = 0;
 let timerId = NaN;
 let timerCt = 60;
-let lineLen = 0; //連打メーターの線の長さ
+let meterWidth = 0; //連打メーターの幅の値
 let isPushedShiftKey = false;
 let isPushedKey = false;
 const SHIFT_KEY_CODE = 16;
 const SPACE_KEY_CODE = 32;
+const MAX_METER_WIDTH = 625;
 
-//Fisher–Yatesシャッフルアルゴリズムを使った配列シャッフル・参考書にあったので参考
+//Fisher–Yatesシャッフルアルゴリズムを使った配列シャッフル・参考書にあったので使用
 Array.prototype.shuffle = function() {
   let w = this.length;
   while (w) {
@@ -205,19 +206,19 @@ let showResult = () => {
 }
 
 let updateCorrectContinueBar = () => {
-  if(lineLen >= 625) {
-    lineLen = 0;
+  if(meterWidth >= MAX_METER_WIDTH) {
+    meterWidth = 0;
   }
   let meterMain = document.getElementById("meter_main");
   //全て打ったキー数と正しく打ったキー数を引き算し、差が無ければカウントアップ
   //差が出たらカウントリセットし、missTypeCntに差を代入
   if(charTypingCnt - correctTypeCnt === missTypeCnt) {
-    lineLen = lineLen + 5;
+    meterWidth = meterWidth + 5;
   } else {
-    lineLen = 0;
+    meterWidth = 0;
     missTypeCnt = charTypingCnt - correctTypeCnt;
   }
-  switch (lineLen) {
+  switch (meterWidth) {
     case 125:
       timerCt = timerCt + 1;
       counter.textContent = "Time: " + timerCt + "s";
@@ -234,10 +235,10 @@ let updateCorrectContinueBar = () => {
       timerCt = timerCt + 2;
       counter.textContent = "Time: " + timerCt + "s";
       break;
-    case 625:
+    case MAX_METER_WIDTH:
       timerCt = timerCt + 3;
       counter.textContent = "Time: " + timerCt + "s";
       break;
   }
-  meterMain.style.width = lineLen + "px";
+  meterMain.style.width = meterWidth + "px";
 }
