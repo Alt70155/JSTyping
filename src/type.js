@@ -1,5 +1,5 @@
 "use strict";
-let start0 = () => {
+let firstFunc = () => {
 let useProblem = [];
 let questionsNum = 0; //二次元配列での問題が何列目かのカウント
 let charCodeIndex = 1; //何文字目かのカウント
