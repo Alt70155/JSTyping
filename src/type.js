@@ -1,5 +1,5 @@
 "use strict";
-
+let start0 = () => {
 let useProblem = [];
 let questionsNum = 0; //二次元配列での問題が何列目かのカウント
 let charCodeIndex = 1; //何文字目かのカウント
@@ -41,6 +41,7 @@ let start = () => {
     }
   }
 }
+start();
 
 let init = () => {
   if (questionsNum === 4) { //出した問題数が4になったらuseProblemの中身を更新し、普通の問題を出す
@@ -193,4 +194,5 @@ let updateCorrectContinueBar = () => {
       break;
   }
   meterMain.style.width = meterWidth + "px";
+}
 }
