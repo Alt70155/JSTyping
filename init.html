@@ -7,16 +7,21 @@
   <link href="https://fonts.googleapis.com/css?family=Exo" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css?family=Playfair+Display" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css?family=Noto+Serif" rel="stylesheet">
-  <link rel="stylesheet" type="text/css" href="css.css">
+  <link rel="shortcut icon" href="JSfavicon.jpg">
+  <link rel="stylesheet" type="text/css" href="jstype-css.css">
+  <script src="src/problem_array.js" charset="utf-8" defer></script>
+  <script src="src/type.js" charset="utf-8" defer></script>
 </head>
 
-<body onload="firstFunc()">
+<body onload="start()">
   <div id="content">
+
     <div id="main-center">
       <div id="title_start">
         <h1 id="first_start">スペースキーを押すとスタートします</h1>
       </div>
     </div>
+    
     <div id="Multi_panel">
       <div id="counter"></div>
       <div id="small_meter_panel">
@@ -42,12 +47,12 @@
   <div id="result" style="display: none;">
     <h1 id="score1"></h1>
     <h1 id="score2"></h1>
-    <div class="toTop_posi">
-      <a href="main.html" class="cp_btn">topへ</a>
+
+    <div class="each-page-link">
+      <a href="index.html" class="cp_btn">topへ</a>
+      <a href="init.html" class="cp_btn">もう一度</a>
     </div>
   </div>
-  <script src="./src/problem_array.js" charset="utf-8"></script>
-  <script src="./src/type.js" charset="utf-8"></script>
 </body>
 
 </html>

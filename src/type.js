@@ -1,5 +1,5 @@
 "use strict";
-let firstFunc = () => {
+
 let useProblem = [];
 let questionsNum = 0; //二次元配列での問題が何列目かのカウント
 let charCodeIndex = 1; //何文字目かのカウント
@@ -41,10 +41,10 @@ let start = () => {
     }
   }
 }
-start();
 
 let init = () => {
-  if (questionsNum === 4) { //出した問題数が4になったらuseProblemの中身を更新し、普通の問題を出す
+  //出した問題数が4になったらuseProblemの中身を更新し、普通の問題を出す
+  if (questionsNum === 4) {
     useProblem = commonProblem;
   }
   createNode();
@@ -95,7 +95,7 @@ function keydown(e) {
 
 
 function releaseFunction(e) {
-  if(e.keyCode === 16) {
+  if(e.keyCode === SHIFT_KEY_CODE) {
     isPushedShiftKey = false;
   }
   isPushedKey = false;
@@ -104,9 +104,9 @@ function releaseFunction(e) {
 //DOM再構成と問題文の表示
 let createNode = () => {
   let main_center = document.getElementById("main-center");
-  let div_out = document.createElement("div");
+  let div_out     = document.createElement("div");
+  let div_inner   = document.createElement("div");
   div_out.className = "out";
-  let div_inner = document.createElement("div");
   div_inner.className = "inner";
 
   //createDocumentFragmentはパフォーマンスがcreateElementより良いらしいので変更
@@ -126,7 +126,7 @@ let ifCorrectFunc = () => {
   charCodeIndex += 2;
   correctTypeCnt++;
   let newElm = document.querySelector(".before");
-  newElm.className = "after";
+  newElm.className = "after";c
 }
 
 let nodeDelete = (x) => {
@@ -194,5 +194,4 @@ let updateCorrectContinueBar = () => {
       break;
   }
   meterMain.style.width = meterWidth + "px";
-}
 }

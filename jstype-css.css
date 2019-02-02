@@ -40,16 +40,18 @@
 a.cp_btn {
   margin: auto;
   display: block;
-  width: 150px;
+  min-width: 200px;
   padding: 0.8em;
   text-align: center;
   text-decoration: none;
   color: #EC407A;
   border: 1px solid #EC407A;
   border-radius: 3px;
+  -webkit-transition: .4s;
   transition: .4s;
   font-family: 'Exo', sans-serif;
   font-size: 20px;
+  justify-content: space-between;
 }
 
 a.cp_btn:hover {
@@ -178,12 +180,13 @@ span {
   margin-top: 60px;
 }
 
-.toTop_posi {
-  width: 200px;
+.each-page-link {
+  width: 500px;
   height: 100px;
   margin: auto;
   margin-top: 30px;
   text-align: center;
+  display: flex;
 }
 
 #Multi_panel {
@@ -216,6 +219,8 @@ span {
 }
 
 #small_meter_panel {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
 }
 
@@ -254,5 +259,7 @@ span {
 }
 
 #meter_txt_panel {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
 }

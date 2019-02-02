@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>サンプル</title>
+  <style media="screen">
+    body {
+      background-color: grey;
+    }
+    h1 {
+      color: white;
+      text-align: center;
+      margin-top: 200px;
+      font-size: 105px;
+    }
+    .white {
+      color:white;
+    }
+    .black {
+      color:black;
+    }
+    p{
+      margin-top: -20px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <h1 class="prob"></h1>
+  <p id="elem"></p>
+  <script>
+
+    const a = { str : 'a', code : 65 }
+    const b = { str : 'b', code : 66 }
+    const c = { str : 'c', code : 67 }
+    const d = { str : 'd', code : 68 }
+    const e = { str : 'e', code : 69 }
+    const f = { str : 'f', code : 70 }
+    const g = { str : 'g', code : 71 }
+    const h = { str : 'h', code : 72 }
+    const i = { str : 'i', code : 73 }
+    const j = { str : 'j', code : 74 }
+    const k = { str : 'k', code : 75 }
+    const l = { str : 'l', code : 76 }
+    const m = { str : 'm', code : 77 }
+    const n = { str : 'n', code : 78 }
+    const o = { str : 'o', code : 79 }
+    const p = { str : 'p', code : 80 }
+    const q = { str : 'q', code : 81 }
+    const r = { str : 'r', code : 82 }
+    const s = { str : 's', code : 83 }
+    const t = { str : 't', code : 84 }
+    const u = { str : 'u', code : 85 }
+    const v = { str : 'v', code : 86 }
+    const w = { str : 'w', code : 87 }
+    const x = { str : 'x', code : 88 }
+    const y = { str : 'y', code : 89 }
+    const z = { str : 'z', code : 90 }
+    const ten = { str : '.', code : 190 }
+
+    const prob1 = { probStr : [n.str, u.str, l.str, l.str],
+                    keyCode : [n.code, u.code, l.code, l.code] }
+    const prob2 = { probStr : [u.str, n.str, d.str, e.str, f.str, i.str, n.str, e.str, d.str],
+                    keyCode : [u.code, n.code, d.code, e.code, f.code, i.code, n.code, e.code, d.code, ] }
+    const prob3 = { probStr : [c.str, o.str, n.str, s.str, o.str, l.str, e.str, ten.str, l.str, o.str, g.str],
+                    keyCode : [c.code, o.code, n.code, s.code, o.code, l.code, e.code, ten.code, l.code, o.code, g.code] }
+    const ary = [prob1, prob2, prob3];
+    let correctNum  = 0;
+    let correctNumAll = 0;
+    let mistakenNum = 0;
+    let probNum = 0;
+
+    const h1 = document.querySelector('.prob');
+
+    //問題の文字列作成
+    const createProblemString = () => {
+      ary[probNum].probStr.forEach( x => {
+        const spanElem = document.createElement("span");
+        spanElem.className = 'white';
+        spanElem.textContent = x;
+        h1.appendChild(spanElem);
+      });
+    }
+
+    const inputJudge = e => {
+      let char = document.querySelector('.white');
+      if (e.keyCode === ary[probNum].keyCode[correctNum]) {
+        char.className = 'black';
+        correctNum++;
+        correctNumAll++;
+        if (ary[probNum].probStr.length === correctNum) {
+          probNum++;
+          correctNum = 0;
+          nodeDelete();
+          if (probNum !== ary.length) {
+            createProblemString();
+          } else {
+            document.write('<h1 style="text-align:center;margin-top:200px;">CLEAR!</h1>');
+            return;
+          }
+        }
+      } else {
+        mistakenNum++;
+      }
+      document.querySelector('#elem').textContent = `正：${correctNumAll}　ミス：${mistakenNum}`
+    }
+
+    createProblemString();
+    window.addEventListener('keydown', inputJudge);
+
+    const nodeDelete = () => {
+      while (h1.firstChild) {
+        h1.removeChild(h1.firstChild);
+      }
+    }
+  </script>
+</body>
+</html>
